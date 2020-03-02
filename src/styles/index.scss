@@ -1,6 +1,9 @@
-$body-color: slateblue;
+* {
+  margin: 0;
+  padding: 0;
+}
 
+html,
 body {
-  color: $body-color;
-  font-family: sans-serif;
+  overflow: hidden;
 }
