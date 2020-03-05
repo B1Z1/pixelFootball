@@ -1,22 +1,37 @@
+import { store } from "../Store";
+
 export class FootballField {
-  constructor(ctx, canvas) {
+  constructor() {
+    const { game, footballField } = store;
+    const { ctx, width, height } = game;
+    const {
+      fieldGap,
+      fieldFragmentColor,
+      fieldColor,
+      middleCircleRadius,
+      lineGap,
+      lineCount,
+      lineColor,
+      gateCoords,
+      gateSizes
+    } = footballField;
+
     this.ctx = ctx;
-    this.canvas = canvas;
-    this.fieldColor = "#2D761A";
-    this.fieldFragmentColor = "#4b9e36";
-    this.lineColor = "#ffffff";
-    this.lineCount = 8;
-    this.lineGap = 64;
-    this.fieldGap = 48;
-    this.middleCircleRadius = 64;
-    this.gateSizes = {
-      width: 20,
-      height: 64
-    };
-    this.gateCoords = [];
+    this.fieldWidth = width;
+    this.fieldHeight = height;
+    this.fieldColor = fieldColor;
+    this.fieldFragmentColor = fieldFragmentColor;
+    this.lineColor = lineColor;
+    this.lineCount = lineCount;
+    this.lineGap = lineGap;
+    this.fieldGap = fieldGap;
+    this.middleCircleRadius = middleCircleRadius;
+    this.gateSizes = gateSizes;
+    this.gateCoords = gateCoords;
   }
 
   setupField() {
+    this.setFieldSizes();
     this.setGateCoords();
     this.setMainFieldColor();
     this.drawFieldLightLines();
@@ -24,29 +39,31 @@ export class FootballField {
     this.drawGates();
   }
 
-  setGateCoords() {
-    const { width, height } = this.canvas;
+  setFieldSizes() {
+    this.fieldWidth = store.game.width;
+    this.fieldHeight = store.game.height;
+  }
 
-    this.gateCoords = [
+  setGateCoords() {
+    this.gateCoords = store.footballField.gateCoords = [
       {
         x: this.fieldGap / 2 + 4,
-        y: height / 2 - this.gateSizes.height / 2
+        y: this.fieldHeight / 2 - this.gateSizes.height / 2
       },
       {
-        x: width - this.fieldGap,
-        y: height / 2 - this.gateSizes.height / 2
+        x: this.fieldWidth - this.fieldGap,
+        y: this.fieldHeight / 2 - this.gateSizes.height / 2
       }
     ];
   }
 
   setMainFieldColor() {
     this.ctx.fillStyle = this.fieldColor;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, this.fieldWidth, this.fieldHeight);
   }
 
   drawFieldLightLines() {
-    const { width, height } = this.canvas;
-    const lineWidth = Math.floor(width / this.lineCount);
+    const lineWidth = Math.floor(this.fieldWidth / this.lineCount);
 
     for (let i = 0; i < this.lineCount; i++) {
       this.ctx.beginPath();
@@ -55,35 +72,34 @@ export class FootballField {
         lineWidth * i + this.lineGap / 2,
         0,
         lineWidth - this.lineGap,
-        height
+        this.fieldHeight
       );
       this.ctx.closePath();
     }
   }
 
   drawFieldLine() {
-    const { width, height } = this.canvas;
     this.ctx.strokeStyle = this.lineColor;
 
     this.ctx.beginPath();
     this.ctx.strokeRect(
       this.fieldGap,
       this.fieldGap,
-      width - this.fieldGap * 2,
-      height - this.fieldGap * 2
+      this.fieldWidth - this.fieldGap * 2,
+      this.fieldHeight - this.fieldGap * 2
     );
     this.ctx.closePath();
 
     this.ctx.beginPath();
-    this.ctx.moveTo(width / 2, this.fieldGap);
-    this.ctx.lineTo(width / 2, height - this.fieldGap);
+    this.ctx.moveTo(this.fieldWidth / 2, this.fieldGap);
+    this.ctx.lineTo(this.fieldWidth / 2, this.fieldHeight - this.fieldGap);
     this.ctx.stroke();
     this.ctx.closePath();
 
     this.ctx.beginPath();
     this.ctx.arc(
-      width / 2,
-      height / 2,
+      this.fieldWidth / 2,
+      this.fieldHeight / 2,
       this.middleCircleRadius,
       0,
       2 * Math.PI

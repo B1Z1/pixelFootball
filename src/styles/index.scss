@@ -6,4 +6,47 @@
 html,
 body {
   overflow: hidden;
+  background: #2d761a;
+}
+
+.shock-canvas-1 {
+  animation: shock-1 0.3s cubic-bezier(0.03, 0.98, 0.15, 0.99);
+}
+.shock-canvas-2 {
+  animation: shock-2 0.3s cubic-bezier(0.03, 0.98, 0.15, 0.99);
+}
+
+@keyframes shock-1 {
+  0% {
+    transform: rotate(30deg) scale(1.8);
+  }
+  30% {
+    transform: rotate(-5deg) scale(1.2);
+  }
+  60% {
+    transform: rotate(20deg) scale(1.8);
+  }
+  90% {
+    transform: rotate(-10deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes shock-2 {
+  0% {
+    transform: rotate(-30deg) scale(2);
+  }
+  30% {
+    transform: rotate(10deg) scale(1.4);
+  }
+  60% {
+    transform: rotate(-15deg) scale(1.2);
+  }
+  90% {
+    transform: rotate(12deg) scale(1.4);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
